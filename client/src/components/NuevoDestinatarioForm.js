@@ -17,6 +17,16 @@ const NuevoDestinatarioForm = (props) => {
 
   const tipoCuenta = ["Vista", "Corriente", "Cuenta Rut"];
 
+  function validateEmail(value) {
+    let error;
+    if (!value) {
+      error = "Required";
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+      error = "Email inválido";
+    }
+    return error;
+  }
+
   return (
     <div>
       <Formik
@@ -32,7 +42,7 @@ const NuevoDestinatarioForm = (props) => {
         validationSchema={Yup.object().shape({
           rut: Yup.string()
             .min(3, "Tu nombre es muy corto")
-            .required("Por favor ingresa tu nombre"),
+            .required("Por favor ingresa tu Rut"),
 
           name: Yup.string()
             .min(3, "El apellido es muy corto")
@@ -48,85 +58,89 @@ const NuevoDestinatarioForm = (props) => {
             .max(15, "Tu telefono es muy largo")
             .required("Por favor ingresa tu telefono"),
 
-          account_number: Yup.string()
-            .min(3, "Tu account_number es muy corto")
-            .required("Por favor ingresa tu account_number"),
+          bank: Yup.string().required("Debes elegir un banco"),
+
+          account_type: Yup.string().required("Debes elegir un tipo de cuenta"),
+
+          account_number: Yup.number()
+            .min(4, "Tu numero de cuenta es muy corto")
+            .min(20, "Tu numero de cuenta es muy largo")
+            .required("ERROR: El numero de cuenta es obligatorio!")
+            .test(
+              "Is positive?",
+              "El numero de cuenta debe ser positivo!",
+              (value) => value > 0
+            ),
         })}
         onSubmit={(values, { setSubmitting }) => {
           const timeOut = setTimeout(() => {
-            // console.log(values);
             onSubmitProp(values);
             setSubmitting(false);
             clearTimeout(timeOut);
           }, 1000);
         }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleSubmit,
-          valid,
-        }) => {
+        {({ values, errors, touched, handleSubmit, valid }) => {
           return (
             <div className="table">
               <Form className="contact" method="post" onSubmit={handleSubmit}>
                 <div className="tr">
-                  <label htmlFor="rut" className="col-sm-4 col-form-label">
+                  <label htmlFor="rut" className="col-sm-6 col-form-label">
                     Rut
                   </label>
                   <Field
                     id="rut"
                     type="text"
                     className="form-control"
-                    placeholder="Rut"
+                    placeholder="Ingrese su rut"
                     name="rut"
                   />
                   {errors.rut && touched.rut && <p>{errors.rut}</p>}
                 </div>
                 <div className="tr">
-                  <label htmlFor="name" className="col-sm-4 col-form-label">
+                  <label htmlFor="name" className="col-sm-6 col-form-label">
                     Nombre
                   </label>
                   <Field
                     id="name"
                     type="text"
-                    placeholder="Nombre"
+                    placeholder="Ingrese su nombre"
                     className="form-control"
                     name="name"
                   />
                   {errors.name && touched.name && <p>{errors.name}</p>}
                 </div>
                 <div className="tr">
-                  <label htmlFor="email" className="col-form-label td">
-                    Correo Electrónico
+                  <label htmlFor="email" className="col-sm-6 col-form-label td">
+                    Correo
                   </label>
                   <Field
                     id="email"
                     type="text"
-                    placeholder="Email"
+                    placeholder="Ingrese su email"
                     className="form-control td"
                     name="email"
+                    validate={validateEmail}
                   />
                   <ErrorMessage className="td" name="email">
                     {(msg) => <p className="td">{msg}</p>}
                   </ErrorMessage>
                 </div>
                 <div className="tr">
-                  <label htmlFor="phone" className="col-sm-4 col-form-label">
+                  <label htmlFor="phone" className="col-sm-6 col-form-label">
                     Telefono
                   </label>
                   <Field
                     id="phone"
                     type="text"
-                    placeholder="phone"
+                    placeholder="Ingrese su telefono"
                     className="form-control"
                     name="phone"
                   />
                   {errors.phone && touched.phone && <p>{errors.phone}</p>}
                 </div>
                 <div className="tr">
-                  <label htmlFor="bank" className="col-sm-4 col-form-label">
+                  <label htmlFor="bank" className="col-sm-6 col-form-label">
                     Banco
                   </label>
 
@@ -143,9 +157,9 @@ const NuevoDestinatarioForm = (props) => {
                 <div className="tr">
                   <label
                     htmlFor="account_type"
-                    className="col-sm-4 col-form-label"
+                    className="col-sm-6 col-form-label"
                   >
-                    account_type
+                    Tipo de cuenta
                   </label>
 
                   <Field as="select" name="account_type">
@@ -165,20 +179,20 @@ const NuevoDestinatarioForm = (props) => {
                     htmlFor="account_number"
                     className="col-sm-6 col-form-label"
                   >
-                    account_number
+                    Nº de cuenta
                   </label>
                   <Field
                     id="account_number"
                     type="text"
-                    placeholder="account_number"
-                    className="form-control"
+                    placeholder="Ingrese su número de cuenta"
+                    className="col-sm-6 form-control"
                     name="account_number"
                   />
                   {errors.account_number && touched.account_number && (
                     <p>{errors.account_number}</p>
                   )}
                 </div>
-                <div className="tr">
+                <div className="tr crea-dest-btn">
                   <button
                     type="submit"
                     disabled={Object.values(errors).length > 0}

@@ -114,3 +114,11 @@ button:hover {
   flex-direction: column;
   align-items: center;
 }
+
+.crea-dest-btn {
+  margin-top: 4%;
+}
+
+.card-header {
+  text-align: center;
+}
