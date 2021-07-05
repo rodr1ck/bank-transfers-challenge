@@ -1,0 +1,39 @@
+### Crea destinatario
+POST http://localhost:8000/api/destinatario/new
+content-type: application/json
+
+{
+    "rut": 134978953,
+    "name": "Daniel",
+    "email": "rodrigo.orelana@gmail.com",
+    "phone": 123456789,
+    "bank": "Santander",
+    "account_type": "corriente",
+    "account_number": 6570903
+}
+
+### GET destinatario
+GET http://localhost:8000/api/destinatario/134978953
+
+### Crea transferencia
+POST http://localhost:8000/api/transferencia/new
+content-type: application/json
+
+{
+    "rut": 134978953,
+    "name": "Daniel",
+    "bank": "Santander",
+    "account_type": "corriente",
+    "amount": 100
+}
+
+### GET all transfers
+GET http://localhost:8000/api/transfers
+
+
+
+
+
+
+
+

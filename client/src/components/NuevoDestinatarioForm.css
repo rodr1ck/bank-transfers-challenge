@@ -1,0 +1,16 @@
+DIV.table 
+{
+    display: flex;
+    justify-content: center;
+}
+FORM.tr, DIV.tr
+{
+    display:table-row;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+SPAN.td
+{
+    display:table-cell;
+}
